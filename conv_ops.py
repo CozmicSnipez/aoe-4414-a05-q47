@@ -28,21 +28,14 @@ import sys
 
 # Helper function to calculate the output dimensions of the convolution layer
 def calc_conv_output(c_in, h_in, w_in, n_filt, h_filt, w_filt, s, p):
-    # Output dimensions after convolution
     h_out = (h_in - h_filt + 2 * p) / s + 1
     w_out = (w_in - w_filt + 2 * p) / s + 1
     c_out = n_filt
 
     # Calculate the number of operations
-    # Each filter performs one multiplication per element in the filter
     muls_per_filter = c_in * h_filt * w_filt
     muls = muls_per_filter * h_out * w_out * n_filt
-
-    # Each multiplication is followed by an addition (except the first one)
-    adds_per_filter = (muls_per_filter - 1)
-    adds = adds_per_filter * h_out * w_out * n_filt
-
-    # Divisions are not generally part of the basic convolution operations
+    adds = muls
     divs = 0
 
     return c_out, h_out, w_out, adds, muls, divs
